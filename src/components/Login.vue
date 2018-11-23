@@ -16,9 +16,9 @@
 </template>
 <script>
   import {postRequest} from '../utils/api'
-  import {putRequest} from '../utils/api'
-  export default{
-    data(){
+
+  export default {
+    data() {
       return {
         rules: {
           account: [{required: true, message: '请输入用户名', trigger: 'blur'}],
@@ -39,7 +39,7 @@
         postRequest('/login', {
           username: this.loginForm.username,
           password: this.loginForm.password
-        }).then(resp=> {
+        }).then(resp => {
           _this.loading = false;
           if (resp.status == 200) {
             //成功
@@ -53,7 +53,7 @@
             //失败
             _this.$alert('登录失败!', '失败!');
           }
-        }, resp=> {
+        }, resp => {
           _this.loading = false;
           _this.$alert('找不到服务器⊙﹏⊙∥!', '失败!');
         });

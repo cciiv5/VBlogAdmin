@@ -18,10 +18,10 @@
   </el-card>
 </template>
 <script>
-  import {getRequest} from '../utils/api'
-  import {putRequest} from '../utils/api'
-  export default{
-    data(){
+  import {getRequest, putRequest} from '../utils/api'
+
+  export default {
+    data() {
       return {
         emailValidateForm: {
           email: ''
@@ -31,7 +31,7 @@
     },
     mounted: function () {
       var _this = this;
-      getRequest("/currentUserEmail").then(resp=> {
+      getRequest("/currentUserEmail").then(resp => {
         if (resp.status == 200) {
           _this.emailValidateForm.email = resp.data;
         }
@@ -43,14 +43,14 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             _this.loading = true;
-            putRequest("/updateUserEmail", {email: _this.emailValidateForm.email}).then(resp=> {
+            putRequest("/updateUserEmail", {email: _this.emailValidateForm.email}).then(resp => {
               _this.loading = false;
               if (resp.status == 200) {
                 _this.$message({type: resp.data.status, message: resp.data.msg});
               } else {
                 _this.$message({type: 'error', message: '开启失败!'});
               }
-            }, resp=> {
+            }, resp => {
               _this.loading = false;
               _this.$message({type: 'error', message: '开启失败!'});
             });

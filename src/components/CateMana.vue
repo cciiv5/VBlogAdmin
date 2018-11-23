@@ -54,16 +54,14 @@
   </el-container>
 </template>
 <script>
-  import {postRequest} from '../utils/api'
-  import {putRequest} from '../utils/api'
-  import {deleteRequest} from '../utils/api'
-  import {getRequest} from '../utils/api'
-  export default{
+  import {deleteRequest, getRequest, postRequest, putRequest} from '../utils/api'
+
+  export default {
     methods: {
-      addNewCate(){
+      addNewCate() {
         this.loading = true;
         var _this = this;
-        postRequest('/admin/category/', {cateName: this.cateName}).then(resp=> {
+        postRequest('/admin/category/', {cateName: this.cateName}).then(resp => {
           if (resp.status == 200) {
             var json = resp.data;
             _this.$message({type: json.status, message: json.msg});
@@ -71,7 +69,7 @@
             _this.refresh();
           }
           _this.loading = false;
-        }, resp=> {
+        }, resp => {
           if (resp.response.status == 403) {
             _this.$message({
               type: 'error',
@@ -81,13 +79,13 @@
           _this.loading = false;
         });
       },
-      deleteAll(){
+      deleteAll() {
         var _this = this;
         this.$confirm('确认删除这 ' + this.selItems.length + ' 条数据?', '提示', {
           type: 'warning',
           confirmButtonText: '确定',
           cancelButtonText: '取消'
-        }).then(()=> {
+        }).then(() => {
           var selItems = _this.selItems;
           var ids = '';
           for (var i = 0; i < selItems.length; i++) {
@@ -102,7 +100,7 @@
       handleSelectionChange(val) {
         this.selItems = val;
       },
-      handleEdit(index, row){
+      handleEdit(index, row) {
         var _this = this;
         this.$prompt('请输入新名称', '编辑', {
           confirmButtonText: '更新',
@@ -117,14 +115,14 @@
             });
           } else {
             _this.loading = true;
-            putRequest("/admin/category/", {id: row.id, cateName: value}).then(resp=> {
+            putRequest("/admin/category/", {id: row.id, cateName: value}).then(resp => {
               var json = resp.data;
               _this.$message({
                 type: json.status,
                 message: json.msg
               });
               _this.refresh();
-            }, resp=> {
+            }, resp => {
               if (resp.response.status == 403) {
                 _this.$message({
                   type: 'error',
@@ -136,7 +134,7 @@
           }
         });
       },
-      handleDelete(index, row){
+      handleDelete(index, row) {
         let _this = this;
         this.$confirm('确认删除 ' + row.cateName + ' ?', '提示', {
           confirmButtonText: '确定',
@@ -149,18 +147,18 @@
           _this.loading = false;
         });
       },
-      deleteCate(ids){
+      deleteCate(ids) {
         var _this = this;
         this.loading = true;
         //删除
-        deleteRequest("/admin/category/" + ids).then(resp=> {
+        deleteRequest("/admin/category/" + ids).then(resp => {
           var json = resp.data;
           _this.$message({
             type: json.status,
             message: json.msg
           });
           _this.refresh();
-        }, resp=> {
+        }, resp => {
           _this.loading = false;
           if (resp.response.status == 403) {
             _this.$message({
@@ -175,12 +173,12 @@
           }
         })
       },
-      refresh(){
+      refresh() {
         let _this = this;
-        getRequest("/admin/category/all").then(resp=> {
+        getRequest("/admin/category/all").then(resp => {
           _this.categories = resp.data;
           _this.loading = false;
-        }, resp=> {
+        }, resp => {
           if (resp.response.status == 403) {
             _this.$message({
               type: 'error',
@@ -195,7 +193,7 @@
       this.loading = true;
       this.refresh();
     },
-    data(){
+    data() {
       return {
         cateName: '',
         selItems: [],

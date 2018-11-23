@@ -75,10 +75,9 @@
   </div>
 </template>
 <script>
-  import {getRequest} from '../utils/api'
-  import {putRequest} from '../utils/api'
-  import {deleteRequest} from '../utils/api'
-  export default{
+  import {deleteRequest, getRequest, putRequest} from '../utils/api'
+
+  export default {
     mounted: function () {
       this.loading = true;
       this.loadUserList();
@@ -90,7 +89,7 @@
       });
     },
     methods: {
-      saveRoles(id, index){
+      saveRoles(id, index) {
         var selRoles = this.roles;
         if (this.cpRoles.length == selRoles.length) {
           for (var i = 0; i < this.cpRoles.length; i++) {
@@ -107,7 +106,7 @@
         }
         var _this = this;
         _this.cardloading.splice(index, 1, true)
-        putRequest("/admin/user/role", {rids: this.roles, id: id}).then(resp=> {
+        putRequest("/admin/user/role", {rids: this.roles, id: id}).then(resp => {
           if (resp.status == 200 && resp.data.status == 'success') {
             _this.$message({type: resp.data.status, message: resp.data.msg});
             _this.loadOneUserById(id, index);
@@ -115,7 +114,7 @@
             _this.cardloading.splice(index, 1, false)
             _this.$message({type: 'error', message: '更新失败!'});
           }
-        }, resp=> {
+        }, resp => {
           _this.cardloading.splice(index, 1, false)
           if (resp.response.status == 403) {
             var data = resp.response.data;
@@ -123,7 +122,7 @@
           }
         });
       },
-      showRole(aRoles, id, index){
+      showRole(aRoles, id, index) {
         this.cpRoles = aRoles;
         this.roles = [];
         this.loadRoles(index);
@@ -131,7 +130,7 @@
           this.roles.push(aRoles[i].id);
         }
       },
-      deleteUser(id){
+      deleteUser(id) {
         var _this = this;
         this.$confirm('删除该用户, 是否继续?', '提示', {
           confirmButtonText: '确定',
@@ -139,7 +138,7 @@
           type: 'warning'
         }).then(() => {
           _this.loading = true;
-          deleteRequest("/admin/user/" + id).then(resp=> {
+          deleteRequest("/admin/user/" + id).then(resp => {
             if (resp.status == 200 && resp.data.status == 'success') {
               _this.$message({type: 'success', message: '删除成功!'})
               _this.loadUserList();
@@ -147,7 +146,7 @@
             }
             _this.loading = false;
             _this.$message({type: 'error', message: '删除失败!'})
-          }, resp=> {
+          }, resp => {
             _this.loading = false;
             _this.$message({type: 'error', message: '删除失败!'})
           });
@@ -158,10 +157,10 @@
           });
         });
       },
-      enabledChange(enabled, id, index){
+      enabledChange(enabled, id, index) {
         var _this = this;
         _this.cardloading.splice(index, 1, true)
-        putRequest("/admin/user/enabled", {enabled: enabled, uid: id}).then(resp=> {
+        putRequest("/admin/user/enabled", {enabled: enabled, uid: id}).then(resp => {
           if (resp.status != 200) {
             _this.$message({type: 'error', message: '更新失败!'})
             _this.loadOneUserById(id, index);
@@ -169,22 +168,22 @@
           }
           _this.cardloading.splice(index, 1, false)
           _this.$message({type: 'success', message: '更新成功!'})
-        }, resp=> {
+        }, resp => {
           _this.$message({type: 'error', message: '更新失败!'})
           _this.loadOneUserById(id, index);
         });
       },
-      loadRoles(index){
+      loadRoles(index) {
         var _this = this;
         _this.eploading.splice(index, 1, true)
-        getRequest("/admin/roles").then(resp=> {
+        getRequest("/admin/roles").then(resp => {
           _this.eploading.splice(index, 1, false)
           if (resp.status == 200) {
             _this.allRoles = resp.data;
           } else {
             _this.$message({type: 'error', message: '数据加载失败!'});
           }
-        }, resp=> {
+        }, resp => {
           _this.eploading.splice(index, 1, false)
           if (resp.response.status == 403) {
             var data = resp.response.data;
@@ -192,16 +191,16 @@
           }
         });
       },
-      loadOneUserById(id, index){
+      loadOneUserById(id, index) {
         var _this = this;
-        getRequest("/admin/user/" + id).then(resp=> {
+        getRequest("/admin/user/" + id).then(resp => {
           _this.cardloading.splice(index, 1, false)
           if (resp.status == 200) {
             _this.users.splice(index, 1, resp.data);
           } else {
             _this.$message({type: 'error', message: '数据加载失败!'});
           }
-        }, resp=> {
+        }, resp => {
           _this.cardloading.splice(index, 1, false)
           if (resp.response.status == 403) {
             var data = resp.response.data;
@@ -209,16 +208,16 @@
           }
         });
       },
-      loadUserList(){
+      loadUserList() {
         var _this = this;
-        getRequest("/admin/user?nickname="+this.keywords).then(resp=> {
+        getRequest("/admin/user?nickname=" + this.keywords).then(resp => {
           _this.loading = false;
           if (resp.status == 200) {
             _this.users = resp.data;
           } else {
             _this.$message({type: 'error', message: '数据加载失败!'});
           }
-        }, resp=> {
+        }, resp => {
           _this.loading = false;
           if (resp.response.status == 403) {
             var data = resp.response.data;
@@ -226,12 +225,12 @@
           }
         });
       },
-      searchClick(){
+      searchClick() {
         this.loading = true;
         this.loadUserList();
       }
     },
-    data(){
+    data() {
       return {
         loading: false,
         eploading: [],

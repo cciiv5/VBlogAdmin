@@ -29,9 +29,10 @@
 </template>
 <script>
   import {getRequest} from '../utils/api'
-  export default{
+
+  export default {
     methods: {
-      goBack(){
+      goBack() {
         this.$router.go(-1);
       }
     },
@@ -40,17 +41,17 @@
       this.activeName = this.$route.query.an
       var _this = this;
       this.loading = true;
-      getRequest("/article/" + aid).then(resp=> {
+      getRequest("/article/" + aid).then(resp => {
         if (resp.status == 200) {
           _this.article = resp.data;
         }
         _this.loading = false;
-      }, resp=> {
+      }, resp => {
         _this.loading = false;
         _this.$message({type: 'error', message: '页面加载失败!'});
       });
     },
-    data(){
+    data() {
       return {
         article: {},
         loading: false,

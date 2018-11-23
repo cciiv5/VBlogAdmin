@@ -81,12 +81,11 @@
 </template>
 
 <script>
-  import {putRequest} from '../utils/api'
-  import {getRequest} from '../utils/api'
-//  import Vue from 'vue'
-//  var bus = new Vue()
+  import {getRequest, putRequest} from '../utils/api'
+  //  import Vue from 'vue'
+  //  var bus = new Vue()
 
-  export default{
+  export default {
     data() {
       return {
         articles: [],
@@ -110,13 +109,13 @@
       })
     },
     methods: {
-      searchClick(){
+      searchClick() {
         this.loadBlogs(1, this.pageSize);
       },
-      itemClick(row){
+      itemClick(row) {
         this.$router.push({path: '/blogDetail', query: {aid: row.id}})
       },
-      deleteMany(){
+      deleteMany() {
         var selItems = this.selItems;
         for (var i = 0; i < selItems.length; i++) {
           this.dustbinData.push(selItems[i].id)
@@ -124,12 +123,12 @@
         this.deleteToDustBin(selItems[0].state)
       },
       //翻页
-      currentChange(currentPage){
+      currentChange(currentPage) {
         this.currentPage = currentPage;
         this.loading = true;
         this.loadBlogs(currentPage, this.pageSize);
       },
-      loadBlogs(page, count){
+      loadBlogs(page, count) {
         var _this = this;
         var url = '';
         if (this.state == -2) {
@@ -137,7 +136,7 @@
         } else {
           url = "/article/all?state=" + this.state + "&page=" + page + "&count=" + count + "&keywords=" + this.keywords;
         }
-        getRequest(url).then(resp=> {
+        getRequest(url).then(resp => {
           _this.loading = false;
           if (resp.status == 200) {
             _this.articles = resp.data.articles;
@@ -145,14 +144,14 @@
           } else {
             _this.$message({type: 'error', message: '数据加载失败!'});
           }
-        }, resp=> {
+        }, resp => {
           _this.loading = false;
           if (resp.response.status == 403) {
             _this.$message({type: 'error', message: resp.response.data});
           } else {
             _this.$message({type: 'error', message: '数据加载失败!'});
           }
-        }).catch(resp=> {
+        }).catch(resp => {
           //压根没见到服务器
           _this.loading = false;
           _this.$message({type: 'error', message: '数据加载失败!'});
@@ -162,13 +161,13 @@
         this.selItems = val;
       },
       handleEdit(index, row) {
-        this.$router.push({path: '/editBlog', query: {from: this.activeName,id:row.id}});
+        this.$router.push({path: '/editBlog', query: {from: this.activeName, id: row.id}});
       },
       handleDelete(index, row) {
         this.dustbinData.push(row.id);
         this.deleteToDustBin(row.state);
       },
-      deleteToDustBin(state){
+      deleteToDustBin(state) {
         var _this = this;
         this.$confirm(state != 2 ? '将该文件放入回收站，是否继续?' : '永久删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
@@ -182,7 +181,7 @@
           } else {
             url = "/article/dustbin";
           }
-          putRequest(url, {aids: _this.dustbinData, state: state}).then(resp=> {
+          putRequest(url, {aids: _this.dustbinData, state: state}).then(resp => {
             if (resp.status == 200) {
               var data = resp.data;
               _this.$message({type: data.status, message: data.msg});
@@ -194,7 +193,7 @@
             }
             _this.loading = false;
             _this.dustbinData = []
-          }, resp=> {
+          }, resp => {
             _this.loading = false;
             _this.$message({type: 'error', message: '删除失败!'});
             _this.dustbinData = []

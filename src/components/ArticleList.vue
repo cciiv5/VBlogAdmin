@@ -27,14 +27,12 @@
 <script>
   import BlogTable from '@/components/BlogTable'
   import BlogCfg from '@/components/BlogCfg'
-  import {postRequest} from '../utils/api'
-  import {putRequest} from '../utils/api'
-  import {deleteRequest} from '../utils/api'
   import {getRequest} from '../utils/api'
+
   export default {
     mounted: function () {
       var _this = this;
-      getRequest("/isAdmin").then(resp=> {
+      getRequest("/isAdmin").then(resp => {
         if (resp.status == 200) {
           _this.isAdmin = resp.data;
         }
